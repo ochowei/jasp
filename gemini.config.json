@@ -1,0 +1,10 @@
+{
+  "projectType": "react-native",
+  "language": "typescript",
+  "description": "A cross-platform Spotify controller built with React Native and Expo. Supports web, iOS, and Android.",
+  "entryPoint": "App.tsx",
+  "frameworks": ["react-native", "expo", "spotify-api"],
+  "tools": ["expo", "typescript", "spotify-sdk"],
+  "ignore": ["node_modules", ".git", "dist", "build"]
+}
+
