@@ -3,12 +3,15 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import { useSpotifyAuth } from '../hooks/useSpotifyAuth';
 
 export default function HomeScreen() {
-  const { accessToken, promptAsync } = useSpotifyAuth();
+  const { accessToken, userName, promptAsync, logout } = useSpotifyAuth();
 
   return (
     <View style={styles.container}>
       {accessToken ? (
-        <Text>Logged In</Text>
+        <>
+          <Text>Welcome, {userName}</Text>
+          <Button title="Logout" onPress={logout} />
+        </>
       ) : (
         <Button title="Login with Spotify" onPress={() => promptAsync()} />
       )}
