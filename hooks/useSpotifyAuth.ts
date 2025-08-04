@@ -18,7 +18,8 @@ export const useSpotifyAuth = () => {
       scopes: ['user-read-email', 'playlist-modify-public', 'playlist-modify-private'],
       usePKCE: true,
       redirectUri: makeRedirectUri({
-        native: 'jasp://redirect',
+        scheme: 'jasp',
+        path: 'redirect',
       }),
     },
     discovery
