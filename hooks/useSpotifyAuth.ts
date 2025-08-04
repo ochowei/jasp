@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
 import * as WebBrowser from 'expo-web-browser';
+import * as SecureStore from 'expo-secure-store';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -12,6 +13,8 @@ const discovery = {
 
 export const useSpotifyAuth = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const TOKEN_KEY = 'spotify-token';
   const [request, response, promptAsync] = useAuthRequest(
     {
       clientId: process.env.EXPO_PUBLIC_SPOTIFY_CLIENT_ID || '',
@@ -24,6 +27,19 @@ export const useSpotifyAuth = () => {
     },
     discovery
   );
+
+  useEffect(() => {
+    SecureStore.getItemAsync(TOKEN_KEY)
+      .then((token) => {
+        if (token) {
+          setAccessToken(token);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   useEffect(() => {
     if (response?.type === 'success') {
@@ -46,6 +62,11 @@ export const useSpotifyAuth = () => {
       })
         .then((res) => res.json())
         .then((data) => {
+          if (data.access_token) {
+            SecureStore.setItemAsync(TOKEN_KEY, data.access_token).catch(
+              console.error
+            );
+          }
           setAccessToken(data.access_token || null);
         })
         .catch((err) => {
@@ -54,7 +75,10 @@ export const useSpotifyAuth = () => {
     }
   }, [response]);
 
-  const logout = () => setAccessToken(null);
+  const logout = () => {
+    SecureStore.deleteItemAsync(TOKEN_KEY).catch(console.error);
+    setAccessToken(null);
+  };
 
-  return { accessToken, promptAsync, logout };
+  return { accessToken, promptAsync, logout, loading };
 };
