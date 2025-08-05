@@ -1,0 +1,10 @@
+{
+  "projectType": "web",
+  "language": "typescript",
+  "description": "A Spotify Web Player built with React and Spotify Web Playback SDK.",
+  "entryPoint": "src/main.tsx",
+  "frameworks": ["react", "spotify-api"],
+  "tools": ["vite", "typescript", "spotify-web-playback-sdk"],
+  "ignore": ["node_modules", ".git", "dist", "build", ".DS_Store", ".env.local"]
+}
+
